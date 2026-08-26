@@ -1,0 +1,33 @@
+name: Eval harness
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  evals:
+    runs-on: ubuntu-latest
+    env:
+      GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+          cache: pip
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+      - name: Offline checks (always)
+        run: python -m eval.run_evals --skip-llm
+      - name: Full eval suite (requires GROQ_API_KEY secret)
+        if: env.GROQ_API_KEY != ''
+        run: python -m eval.run_evals
+      - name: Upload eval report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: eval-report
+          path: |
+            eval_report.json
+            eval_report.md

@@ -1,0 +1,50 @@
+[
+  {
+    "id": "brief-01-churning-hooli",
+    "task": "brief",
+    "name": "Churning enterprise account surfaces risks",
+    "input": {"account_ref": "ACC-7042"},
+    "criteria": [
+      {"type": "sections_present"},
+      {"type": "risks_min", "value": 2},
+      {"type": "quotes_verified"},
+      {"type": "window_consistent"}
+    ]
+  },
+  {
+    "id": "brief-02-at-risk-quotes",
+    "task": "brief",
+    "name": "At-risk account risk quotes are verbatim",
+    "input": {"account_ref": "ACC-6254"},
+    "criteria": [
+      {"type": "sections_present"},
+      {"type": "quotes_verified"},
+      {"type": "llm_judge", "rubric": "The brief must be actionable for a TAM: executive summary references concrete facts (plan, tickets, health), open risks are specific rather than generic, and talking points reference actual account details. Penalize vague filler."}
+    ]
+  },
+  {
+    "id": "brief-03-healthy-account",
+    "task": "brief",
+    "name": "Healthy account still produces well-formed brief",
+    "input": {"account_ref": "ACC-3033"},
+    "criteria": [
+      {"type": "sections_present"},
+      {"type": "window_consistent"},
+      {"type": "graceful_output_brief"}
+    ]
+  },
+  {
+    "id": "brief-04-adversarial-unknown-id",
+    "task": "brief",
+    "name": "ADVERSARIAL: nonexistent account id handled gracefully",
+    "input": {"account_ref": "ACC-0000", "special": "raises_account_not_found"},
+    "criteria": [{"type": "raises_account_not_found", "account_ref": "ACC-0000"}]
+  },
+  {
+    "id": "brief-05-determinism",
+    "task": "brief",
+    "name": "Deterministic output across repeated runs",
+    "input": {"account_ref": "ACC-7042", "special": "deterministic"},
+    "criteria": [{"type": "deterministic", "account_ref": "ACC-7042", "runs": 2}]
+  }
+]

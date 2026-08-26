@@ -1,0 +1,95 @@
+[
+  {
+    "id": "triage-01-webhook-outage",
+    "task": "triage",
+    "name": "CloudSync webhook delivery failure with error code",
+    "input": {
+      "subject": "Webhook from CloudSync not reaching Snowflake",
+      "body": "Our CloudSync webhooks are not being delivered to Snowflake. We've verified the endpoint is reachable and the secret is correctly configured. Last successful delivery: last week. Failed deliveries since: 9175. Webhook logs attached. Please advise. Environment: Production, 400 users affected."
+    },
+    "criteria": [
+      {"type": "enum_fields"},
+      {"type": "field_equals", "field": "product", "value": "CloudSync"},
+      {"type": "urgency_at_most", "value": "P2"},
+      {"type": "kb_doc_referenced"},
+      {"type": "draft_mentions", "any_of": ["webhook", "sync", "endpoint"], "where": "draft_first_response"},
+      {"type": "reasoning_min_length", "value": 40}
+    ]
+  },
+  {
+    "id": "triage-02-sso-login",
+    "task": "triage",
+    "name": "New users cannot authenticate via SSO",
+    "input": {
+      "subject": "SSO login fails for new employees",
+      "body": "Since Monday, newly created users in Okta cannot sign in to SecureVault. Existing users are unaffected. Error shown: SSO_GROUP_NOT_FOUND. Our IDP groups look correct to us. 12 new hires blocked from onboarding."
+    },
+    "criteria": [
+      {"type": "enum_fields"},
+      {"type": "field_in", "field": "product", "values": ["SecureVault", "CloudSync"]},
+      {"type": "field_equals", "field": "category", "value": "Bug"},
+      {"type": "kb_doc_referenced"},
+      {"type": "known_issue_match_true"}
+    ]
+  },
+  {
+    "id": "triage-03-billing-seats",
+    "task": "triage",
+    "name": "Billing dispute about seat overage",
+    "input": {
+      "subject": "Charged for more seats than we use",
+      "body": "Our invoice this month shows 220 seats but we only have around 150 active employees. Please explain the charges and issue a refund if we were overbilled. This is the second month in a row."
+    },
+    "criteria": [
+      {"type": "enum_fields"},
+      {"type": "field_equals", "field": "category", "value": "Billing"},
+      {"type": "responder_contains", "value": "Billing"},
+      {"type": "no_kb_required"}
+    ]
+  },
+  {
+    "id": "triage-04-p1-data-loss",
+    "task": "triage",
+    "name": "P1 data loss escalation",
+    "input": {
+      "subject": "URGENT: entire Q1 dataset deleted after sync error",
+      "body": "A CloudSync job went wrong and deleted our entire Q1 finance dataset from the production warehouse. Business reporting is completely stopped and our CFO needs numbers today. Restore is not working from snapshots. This is a business-critical outage for us."
+    },
+    "criteria": [
+      {"type": "enum_fields"},
+      {"type": "field_equals", "field": "urgency", "value": "P1"},
+      {"type": "field_in", "field": "category", "values": ["Data Loss", "Bug"]},
+      {"type": "escalation_true"},
+      {"type": "responder_contains", "value": "Tier-2"}
+    ]
+  },
+  {
+    "id": "triage-05-howto-schedule",
+    "task": "triage",
+    "name": "How-to question about scheduled workflows",
+    "input": {
+      "subject": "How do I run a workflow every weekday at 9am?",
+      "body": "I want my WorkflowEngine workflow to run Monday to Friday at 9am in the Europe/Berlin timezone. I could not find where to set the timezone. Also will it catch up if it misses a run during maintenance?"
+    },
+    "criteria": [
+      {"type": "enum_fields"},
+      {"type": "field_equals", "field": "category", "value": "How-To"},
+      {"type": "field_equals", "field": "product", "value": "WorkflowEngine"},
+      {"type": "responder_contains", "value": "Tier-1"}
+    ]
+  },
+  {
+    "id": "triage-06-adversarial-vague",
+    "task": "triage",
+    "name": "ADVERSARIAL: vague one-line ticket",
+    "input": {
+      "subject": "It doesn't work",
+      "body": "Nothing works since your update. Please fix asap."
+    },
+    "criteria": [
+      {"type": "enum_fields"},
+      {"type": "graceful_output"},
+      {"type": "llm_judge", "rubric": "The triage must acknowledge uncertainty appropriately: confidence should be moderate (below 0.85) OR reasoning must explicitly note missing information/ambiguity. Draft response must ask a clarifying question."}
+    ]
+  }
+]
