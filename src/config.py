@@ -14,7 +14,8 @@ ACCOUNTS_PATH = DATA_DIR / "accounts.json"
 load_dotenv(ROOT_DIR / ".env")
 
 GROQ_API_KEY = os.getenv("GROQ_API_KEY", "").strip()
-GROQ_MODEL = os.getenv("GROQ_MODEL", "llama-3.3-70b-versatile").strip()
+# Current general-purpose Groq model with structured JSON support.
+GROQ_MODEL = os.getenv("GROQ_MODEL", "openai/gpt-oss-120b").strip()
 LLM_TEMPERATURE = 0.0
 LLM_SEED = 42
 

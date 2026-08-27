@@ -22,8 +22,9 @@ pip install -r requirements.txt
 copy .env.example .env        # then paste your Groq API key inside .env
 ```
 
-Get a free key at [console.groq.com/keys](https://console.groq.com/keys). The key is read from `.env`
-and is never committed.
+Get a free key at [console.groq.com/keys](https://console.groq.com/keys). The default current
+Groq model is `openai/gpt-oss-120b`; it can be overridden with `GROQ_MODEL`. The key is read from
+`.env` and is never committed.
 
 ## Sample runs
 

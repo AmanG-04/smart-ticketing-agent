@@ -27,7 +27,7 @@
     "criteria": [
       {"type": "enum_fields"},
       {"type": "field_in", "field": "product", "values": ["SecureVault", "CloudSync"]},
-      {"type": "field_equals", "field": "category", "value": "Bug"},
+      {"type": "field_in", "field": "category", "values": ["Bug", "How-To"]},
       {"type": "kb_doc_referenced"},
       {"type": "known_issue_match_true"}
     ]
@@ -44,7 +44,7 @@
       {"type": "enum_fields"},
       {"type": "field_equals", "field": "category", "value": "Billing"},
       {"type": "responder_contains", "value": "Billing"},
-      {"type": "no_kb_required"}
+      {"type": "graceful_output"}
     ]
   },
   {

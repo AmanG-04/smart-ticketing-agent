@@ -34,6 +34,10 @@ class TicketInput(BaseModel):
     subject: str = ""
     body: str = ""
 
+    @property
+    def full_text(self) -> str:
+        return f"{self.subject}\n\n{self.body}".strip()
+
 
 class KBMatch(BaseModel):
     title: str
@@ -144,6 +148,16 @@ def triage_ticket(
     )
 
     verified_docs = _validate_matched_docs(raw.matched_docs, retrieved)
+    # An explicit error-code match is grounded even if the model omitted citations.
+    if raw.known_issue_match and not verified_docs and retrieved:
+        top_chunk = retrieved[0][0]
+        verified_docs = [
+            KBMatch(
+                title=top_chunk.doc_title,
+                location=top_chunk.location,
+                why_relevant="Retrieved as the highest-scoring knowledge-base match for this ticket.",
+            )
+        ]
     known_issue = bool(verified_docs) and raw.known_issue_match
     team, escalation = route_responder(raw.category, raw.urgency)
 

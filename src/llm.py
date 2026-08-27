@@ -43,14 +43,28 @@ class LLMClient:
                 return resp.choices[0].message.content or ""
             except Exception as err:
                 last_err = err
-                transient = "429" in str(err) or "rate" in str(err).lower() or "timeout" in str(err).lower() or "503" in str(err)
+                message = str(err).lower()
+                transient = (
+                    "429" in message
+                    or "rate" in message
+                    or "timeout" in message
+                    or "503" in message
+                    or "json_validate_failed" in message
+                )
                 if not transient or attempt == _MAX_RETRIES - 1:
                     raise
                 time.sleep(_BASE_SLEEP * (2**attempt))
         raise RuntimeError(f"LLM call failed after retries: {last_err}")
 
     def chat_json(self, messages: list[dict[str, str]], schema: Type[T], **kwargs: Any) -> T:
-        parsed_raw: str = self.chat(messages, json_mode=True, **kwargs)
+        try:
+            parsed_raw = self.chat(messages, json_mode=True, **kwargs)
+        except Exception as err:
+            # Some models reject otherwise valid JSON-mode generations before returning them.
+            # The prompt still requires JSON, so retry once without provider-side JSON validation.
+            if "json_validate_failed" not in str(err).lower():
+                raise
+            parsed_raw = self.chat(messages, json_mode=False, **kwargs)
         data = _extract_json(parsed_raw)
         try:
             return schema.model_validate(data)

@@ -63,6 +63,7 @@ class AccountBrief(BaseModel):
 
 
 _WS_RE = re.compile(r"\s+")
+_brief_cache: dict[tuple[str, int], AccountBrief] = {}
 
 
 def _norm(text: str) -> str:
@@ -231,6 +232,12 @@ def generate_account_brief(
     if account is None:
         raise AccountNotFoundError(f"No account found matching '{account_ref}'")
 
+    # Reusing an already generated account/window brief keeps repeated QBR requests stable
+    # while avoiding avoidable model calls. The cache lasts for this process only.
+    cache_key = (account["account_id"], days)
+    if store is None and llm is None and cache_key in _brief_cache:
+        return _brief_cache[cache_key].model_copy(deep=True)
+
     client = llm or get_llm()
     tickets, start, end = st.recent_tickets(account, days=days)
 
@@ -272,7 +279,7 @@ def generate_account_brief(
 
     talking_points = [tp.strip() for tp in raw.recommended_talking_points if tp.strip()][:5]
 
-    return AccountBrief(
+    brief = AccountBrief(
         account_id=account["account_id"],
         company=account["company"],
         plan_tier=account["plan_tier"],
@@ -287,3 +294,6 @@ def generate_account_brief(
         open_risks=merged[:10],
         recommended_talking_points=talking_points,
     )
+    if store is None and llm is None:
+        _brief_cache[cache_key] = brief.model_copy(deep=True)
+    return brief

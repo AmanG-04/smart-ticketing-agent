@@ -1,11 +1,11 @@
 {
   "summary": {
-    "generated_at": "2026-08-26T12:02:40.480847+00:00",
+    "generated_at": "2026-08-27T08:56:37.842621+00:00",
     "total_cases": 16,
-    "passed": 6,
+    "passed": 16,
     "failed": 0,
-    "skipped": 10,
-    "mean_quality": 1.0
+    "skipped": 0,
+    "mean_quality": 0.998
   },
   "cases": [
     {
@@ -51,26 +51,86 @@
     {
       "id": "brief-01-churning-hooli",
       "name": "Churning enterprise account surfaces risks",
-      "status": "skipped",
-      "quality": null,
-      "checks": [],
-      "note": "GROQ_API_KEY is not set. Copy .env.example to .env and add your key from https://console.groq.com/keys"
+      "status": "pass",
+      "quality": 1.0,
+      "checks": [
+        {
+          "type": "sections_present",
+          "passed": true,
+          "score": 1.0,
+          "detail": "summary sentences=4 (need 3-5), talking points=4 (need >=3)"
+        },
+        {
+          "type": "risks_min",
+          "passed": true,
+          "score": 1.0,
+          "detail": "risks=9 need >=2"
+        },
+        {
+          "type": "quotes_verified",
+          "passed": true,
+          "score": 1.0,
+          "detail": "4/4 ticket quotes verbatim"
+        },
+        {
+          "type": "window_consistent",
+          "passed": true,
+          "score": 1.0,
+          "detail": "span=90d expected ~90d"
+        }
+      ]
     },
     {
       "id": "brief-02-at-risk-quotes",
       "name": "At-risk account risk quotes are verbatim",
-      "status": "skipped",
-      "quality": null,
-      "checks": [],
-      "note": "GROQ_API_KEY is not set. Copy .env.example to .env and add your key from https://console.groq.com/keys"
+      "status": "pass",
+      "quality": 0.967,
+      "checks": [
+        {
+          "type": "sections_present",
+          "passed": true,
+          "score": 1.0,
+          "detail": "summary sentences=4 (need 3-5), talking points=4 (need >=3)"
+        },
+        {
+          "type": "quotes_verified",
+          "passed": true,
+          "score": 1.0,
+          "detail": "3/3 ticket quotes verbatim"
+        },
+        {
+          "type": "llm_judge",
+          "passed": true,
+          "score": 0.9,
+          "detail": "The output provides concrete executive summary facts, specific open risks, and detailed talking points tied to actual account data, with only minor omission of plan tier mention."
+        }
+      ]
     },
     {
       "id": "brief-03-healthy-account",
       "name": "Healthy account still produces well-formed brief",
-      "status": "skipped",
-      "quality": null,
-      "checks": [],
-      "note": "GROQ_API_KEY is not set. Copy .env.example to .env and add your key from https://console.groq.com/keys"
+      "status": "pass",
+      "quality": 1.0,
+      "checks": [
+        {
+          "type": "sections_present",
+          "passed": true,
+          "score": 1.0,
+          "detail": "summary sentences=4 (need 3-5), talking points=4 (need >=3)"
+        },
+        {
+          "type": "window_consistent",
+          "passed": true,
+          "score": 1.0,
+          "detail": "span=90d expected ~90d"
+        },
+        {
+          "type": "graceful_output_brief",
+          "passed": true,
+          "score": 1.0,
+          "detail": "missing: []"
+        }
+      ]
     },
     {
       "id": "brief-04-adversarial-unknown-id",
@@ -89,58 +149,226 @@
     {
       "id": "brief-05-determinism",
       "name": "Deterministic output across repeated runs",
-      "status": "skipped",
-      "quality": null,
-      "checks": [],
-      "note": "GROQ_API_KEY is not set. Copy .env.example to .env and add your key from https://console.groq.com/keys"
+      "status": "pass",
+      "quality": 1.0,
+      "checks": [
+        {
+          "type": "deterministic",
+          "passed": true,
+          "score": 1.0,
+          "detail": "hashes equal across 2 runs"
+        }
+      ]
     },
     {
       "id": "triage-01-webhook-outage",
       "name": "CloudSync webhook delivery failure with error code",
-      "status": "skipped",
-      "quality": null,
-      "checks": [],
-      "note": "GROQ_API_KEY is not set. Copy .env.example to .env and add your key from https://console.groq.com/keys"
+      "status": "pass",
+      "quality": 1.0,
+      "checks": [
+        {
+          "type": "enum_fields",
+          "passed": true,
+          "score": 1.0,
+          "detail": ""
+        },
+        {
+          "type": "field_equals",
+          "passed": true,
+          "score": 1.0,
+          "detail": "product='CloudSync' expected 'CloudSync'"
+        },
+        {
+          "type": "urgency_at_most",
+          "passed": true,
+          "score": 1.0,
+          "detail": "urgency='P1' must be at most 'P2'"
+        },
+        {
+          "type": "kb_doc_referenced",
+          "passed": true,
+          "score": 1.0,
+          "detail": "1/1 cited docs exist in the knowledge base"
+        },
+        {
+          "type": "draft_mentions",
+          "passed": true,
+          "score": 1.0,
+          "detail": "matched terms: ['webhook', 'sync', 'endpoint']"
+        },
+        {
+          "type": "reasoning_min_length",
+          "passed": true,
+          "score": 1.0,
+          "detail": "reasoning length=302"
+        }
+      ]
     },
     {
       "id": "triage-02-sso-login",
       "name": "New users cannot authenticate via SSO",
-      "status": "skipped",
-      "quality": null,
-      "checks": [],
-      "note": "GROQ_API_KEY is not set. Copy .env.example to .env and add your key from https://console.groq.com/keys"
+      "status": "pass",
+      "quality": 1.0,
+      "checks": [
+        {
+          "type": "enum_fields",
+          "passed": true,
+          "score": 1.0,
+          "detail": ""
+        },
+        {
+          "type": "field_in",
+          "passed": true,
+          "score": 1.0,
+          "detail": "product='SecureVault' expected one of ['SecureVault', 'CloudSync']"
+        },
+        {
+          "type": "field_in",
+          "passed": true,
+          "score": 1.0,
+          "detail": "category='How-To' expected one of ['Bug', 'How-To']"
+        },
+        {
+          "type": "kb_doc_referenced",
+          "passed": true,
+          "score": 1.0,
+          "detail": "2/2 cited docs exist in the knowledge base"
+        },
+        {
+          "type": "known_issue_match_true",
+          "passed": true,
+          "score": 1.0,
+          "detail": "known_issue_match=True"
+        }
+      ]
     },
     {
       "id": "triage-03-billing-seats",
       "name": "Billing dispute about seat overage",
-      "status": "skipped",
-      "quality": null,
-      "checks": [],
-      "note": "GROQ_API_KEY is not set. Copy .env.example to .env and add your key from https://console.groq.com/keys"
+      "status": "pass",
+      "quality": 1.0,
+      "checks": [
+        {
+          "type": "enum_fields",
+          "passed": true,
+          "score": 1.0,
+          "detail": ""
+        },
+        {
+          "type": "field_equals",
+          "passed": true,
+          "score": 1.0,
+          "detail": "category='Billing' expected 'Billing'"
+        },
+        {
+          "type": "responder_contains",
+          "passed": true,
+          "score": 1.0,
+          "detail": "responder_team='Billing Support'"
+        },
+        {
+          "type": "graceful_output",
+          "passed": true,
+          "score": 1.0,
+          "detail": "missing: []"
+        }
+      ]
     },
     {
       "id": "triage-04-p1-data-loss",
       "name": "P1 data loss escalation",
-      "status": "skipped",
-      "quality": null,
-      "checks": [],
-      "note": "GROQ_API_KEY is not set. Copy .env.example to .env and add your key from https://console.groq.com/keys"
+      "status": "pass",
+      "quality": 1.0,
+      "checks": [
+        {
+          "type": "enum_fields",
+          "passed": true,
+          "score": 1.0,
+          "detail": ""
+        },
+        {
+          "type": "field_equals",
+          "passed": true,
+          "score": 1.0,
+          "detail": "urgency='P1' expected 'P1'"
+        },
+        {
+          "type": "field_in",
+          "passed": true,
+          "score": 1.0,
+          "detail": "category='Data Loss' expected one of ['Data Loss', 'Bug']"
+        },
+        {
+          "type": "escalation_true",
+          "passed": true,
+          "score": 1.0,
+          "detail": "escalation_required=True"
+        },
+        {
+          "type": "responder_contains",
+          "passed": true,
+          "score": 1.0,
+          "detail": "responder_team='P1 Hotline -> Tier-2 Support (Data Recovery)'"
+        }
+      ]
     },
     {
       "id": "triage-05-howto-schedule",
       "name": "How-to question about scheduled workflows",
-      "status": "skipped",
-      "quality": null,
-      "checks": [],
-      "note": "GROQ_API_KEY is not set. Copy .env.example to .env and add your key from https://console.groq.com/keys"
+      "status": "pass",
+      "quality": 1.0,
+      "checks": [
+        {
+          "type": "enum_fields",
+          "passed": true,
+          "score": 1.0,
+          "detail": ""
+        },
+        {
+          "type": "field_equals",
+          "passed": true,
+          "score": 1.0,
+          "detail": "category='How-To' expected 'How-To'"
+        },
+        {
+          "type": "field_equals",
+          "passed": true,
+          "score": 1.0,
+          "detail": "product='WorkflowEngine' expected 'WorkflowEngine'"
+        },
+        {
+          "type": "responder_contains",
+          "passed": true,
+          "score": 1.0,
+          "detail": "responder_team='Tier-1 Support'"
+        }
+      ]
     },
     {
       "id": "triage-06-adversarial-vague",
       "name": "ADVERSARIAL: vague one-line ticket",
-      "status": "skipped",
-      "quality": null,
-      "checks": [],
-      "note": "GROQ_API_KEY is not set. Copy .env.example to .env and add your key from https://console.groq.com/keys"
+      "status": "pass",
+      "quality": 1.0,
+      "checks": [
+        {
+          "type": "enum_fields",
+          "passed": true,
+          "score": 1.0,
+          "detail": ""
+        },
+        {
+          "type": "graceful_output",
+          "passed": true,
+          "score": 1.0,
+          "detail": "missing: []"
+        },
+        {
+          "type": "llm_judge",
+          "passed": true,
+          "score": 1.0,
+          "detail": "The output meets the rubric by providing moderate confidence, noting missing product information, and including a clarifying question in the draft response."
+        }
+      ]
     }
   ]
 }
