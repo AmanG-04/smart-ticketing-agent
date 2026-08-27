@@ -130,7 +130,9 @@ def render_brief() -> None:
             icon = "🏷️" if risk.source == "account" else "🎫"
             with st.expander(f"{icon} {risk.title}  ·  `{risk.quote_ref}`"):
                 st.write(risk.detail)
-                st.quote(risk.quote)
+                st.markdown(
+                    "> " + risk.quote.replace("\n", "\n> ")
+                )
         st.markdown("### Recommended talking points")
         for i, point in enumerate(brief.recommended_talking_points, start=1):
             st.markdown(f"{i}. {point}")
