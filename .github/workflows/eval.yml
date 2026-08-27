@@ -4,6 +4,13 @@ on:
   push:
     branches: [main]
   pull_request:
+  workflow_dispatch:
+    inputs:
+      run_llm_evals:
+        description: "Run live Groq evaluation cases (consumes API quota)"
+        required: false
+        default: false
+        type: boolean
 
 jobs:
   evals:
@@ -11,8 +18,8 @@ jobs:
     env:
       GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
         with:
           python-version: "3.13"
           cache: pip
@@ -20,11 +27,11 @@ jobs:
         run: pip install -r requirements.txt
       - name: Offline checks (always)
         run: python -m eval.run_evals --skip-llm
-      - name: Full eval suite (requires GROQ_API_KEY secret)
-        if: env.GROQ_API_KEY != ''
+      - name: Full eval suite (manual only; consumes Groq API quota)
+        if: github.event_name == 'workflow_dispatch' && inputs.run_llm_evals && env.GROQ_API_KEY != ''
         run: python -m eval.run_evals
       - name: Upload eval report
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         if: always()
         with:
           name: eval-report

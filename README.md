@@ -77,8 +77,10 @@ python -m eval.run_evals --skip-llm   # zero LLM calls: data joins and retrieval
 ```
 
 The latest committed report lives in [`eval_report.md`](eval_report.md) /
-[`eval_report.json`](eval_report.json). CI runs the harness automatically on every push — add
-`GROQ_API_KEY` as a repository secret to unlock the LLM-dependent cases there too.
+[`eval_report.json`](eval_report.json). CI runs zero-cost offline data and retrieval checks on every
+push. To preserve the Groq free-tier request quota, live LLM cases run only when the **Eval harness**
+workflow is manually dispatched with `run_llm_evals` enabled and `GROQ_API_KEY` configured as a
+repository secret.
 
 ---
 
