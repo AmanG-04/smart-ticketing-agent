@@ -70,7 +70,9 @@ def _norm(text: str) -> str:
     return _WS_RE.sub(" ", (text or "")).strip().lower()
 
 
-_MAX_TICKET_BODY_CHARS = 700
+# A brief generally has 5-17 tickets. This cap preserves direct evidence while making
+# the signal-extraction call comfortably fit the free-tier token-per-minute budget.
+_MAX_TICKET_BODY_CHARS = 360
 
 
 def _rule_flags(account: dict[str, Any], anchor: datetime) -> list[RiskFlag]:
@@ -191,7 +193,7 @@ def extract_ticket_signals(
                 {"role": "user", "content": user_msg},
             ],
             schema=RawSignalList,
-            max_tokens=2048,
+            max_tokens=1100,
         )
     except (ValidationError, ValueError):
         return []
@@ -260,7 +262,7 @@ def generate_account_brief(
             {"role": "user", "content": user_msg},
         ],
         schema=RawBrief,
-        max_tokens=2048,
+        max_tokens=1100,
     )
 
     merged: list[RiskFlag] = list(rules)

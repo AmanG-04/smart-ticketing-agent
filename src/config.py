@@ -14,8 +14,9 @@ ACCOUNTS_PATH = DATA_DIR / "accounts.json"
 load_dotenv(ROOT_DIR / ".env")
 
 GROQ_API_KEY = os.getenv("GROQ_API_KEY", "").strip()
-# Current general-purpose Groq model with structured JSON support.
-GROQ_MODEL = os.getenv("GROQ_MODEL", "openai/gpt-oss-120b").strip()
+# Compound Mini has a 70K token/minute free-tier limit (vs 8K for GPT-OSS), which
+# keeps the interactive demo responsive while retaining reliable tool-free JSON output.
+GROQ_MODEL = os.getenv("GROQ_MODEL", "groq/compound-mini").strip()
 LLM_TEMPERATURE = 0.0
 LLM_SEED = 42
 

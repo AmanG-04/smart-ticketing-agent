@@ -1,6 +1,6 @@
 # Evaluation Report
 
-Generated: 2026-08-27T08:56:37.842621+00:00
+Generated: 2026-08-27T17:33:35.063923+00:00
 
 | Metric | Value |
 |--------|-------|
@@ -8,7 +8,7 @@ Generated: 2026-08-27T08:56:37.842621+00:00
 | Passed | 16 |
 | Failed | 0 |
 | Skipped (no API key) | 0 |
-| Mean quality score | 0.998 |
+| Mean quality score | 0.994 |
 
 | Case | Status | Quality | Failed checks |
 |------|--------|---------|---------------|
@@ -22,7 +22,7 @@ Generated: 2026-08-27T08:56:37.842621+00:00
 | brief-03-healthy-account — Healthy account still produces well-formed brief | pass | 1.0 | — |
 | brief-04-adversarial-unknown-id — ADVERSARIAL: nonexistent account id handled gracefully | pass | 1.0 | — |
 | brief-05-determinism — Deterministic output across repeated runs | pass | 1.0 | — |
-| triage-01-webhook-outage — CloudSync webhook delivery failure with error code | pass | 1.0 | — |
+| triage-01-webhook-outage — CloudSync webhook delivery failure with error code | pass | 0.944 | — |
 | triage-02-sso-login — New users cannot authenticate via SSO | pass | 1.0 | — |
 | triage-03-billing-seats — Billing dispute about seat overage | pass | 1.0 | — |
 | triage-04-p1-data-loss — P1 data loss escalation | pass | 1.0 | — |

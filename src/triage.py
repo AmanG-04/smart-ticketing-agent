@@ -131,7 +131,8 @@ def triage_ticket(
     client = llm or get_llm()
 
     retrieved = get_kb().search(t.full_text or "support", k=k_docs)
-    context = get_kb().build_context(retrieved)
+    # Three focused sections give enough grounding without exhausting free-tier TPM.
+    context = get_kb().build_context(retrieved[:3], max_chars=3600)
 
     user_msg = TRIAGE_USER_TEMPLATE.format(
         subject=t.subject.strip() or "(none)",
@@ -145,6 +146,7 @@ def triage_ticket(
             {"role": "user", "content": user_msg},
         ],
         schema=RawTriage,
+        max_tokens=900,
     )
 
     verified_docs = _validate_matched_docs(raw.matched_docs, retrieved)

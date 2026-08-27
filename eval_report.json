@@ -1,11 +1,11 @@
 {
   "summary": {
-    "generated_at": "2026-08-27T08:56:37.842621+00:00",
+    "generated_at": "2026-08-27T17:33:35.063923+00:00",
     "total_cases": 16,
     "passed": 16,
     "failed": 0,
     "skipped": 0,
-    "mean_quality": 0.998
+    "mean_quality": 0.994
   },
   "cases": [
     {
@@ -102,7 +102,7 @@
           "type": "llm_judge",
           "passed": true,
           "score": 0.9,
-          "detail": "The output provides concrete executive summary facts, specific open risks, and detailed talking points tied to actual account data, with only minor omission of plan tier mention."
+          "detail": "The brief provides concrete executive summary facts, specific open risks, and talking points tied to actual account details, with only minor filler in the last talking point."
         }
       ]
     },
@@ -116,7 +116,7 @@
           "type": "sections_present",
           "passed": true,
           "score": 1.0,
-          "detail": "summary sentences=4 (need 3-5), talking points=4 (need >=3)"
+          "detail": "summary sentences=4 (need 3-5), talking points=5 (need >=3)"
         },
         {
           "type": "window_consistent",
@@ -164,7 +164,7 @@
       "id": "triage-01-webhook-outage",
       "name": "CloudSync webhook delivery failure with error code",
       "status": "pass",
-      "quality": 1.0,
+      "quality": 0.944,
       "checks": [
         {
           "type": "enum_fields",
@@ -193,14 +193,14 @@
         {
           "type": "draft_mentions",
           "passed": true,
-          "score": 1.0,
-          "detail": "matched terms: ['webhook', 'sync', 'endpoint']"
+          "score": 0.6666666666666666,
+          "detail": "matched terms: ['webhook', 'endpoint']"
         },
         {
           "type": "reasoning_min_length",
           "passed": true,
           "score": 1.0,
-          "detail": "reasoning length=302"
+          "detail": "reasoning length=341"
         }
       ]
     },
@@ -232,7 +232,7 @@
           "type": "kb_doc_referenced",
           "passed": true,
           "score": 1.0,
-          "detail": "2/2 cited docs exist in the knowledge base"
+          "detail": "1/1 cited docs exist in the knowledge base"
         },
         {
           "type": "known_issue_match_true",
@@ -366,7 +366,7 @@
           "type": "llm_judge",
           "passed": true,
           "score": 1.0,
-          "detail": "The output meets the rubric by providing moderate confidence, noting missing product information, and including a clarifying question in the draft response."
+          "detail": "The output uses a moderate confidence level, notes missing information, and the draft response asks clear clarifying questions."
         }
       ]
     }
