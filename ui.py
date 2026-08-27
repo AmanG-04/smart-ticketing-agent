@@ -21,20 +21,56 @@ def show_key_error() -> None:
 
 def render_triage() -> None:
     st.subheader("Intelligent Ticket Triage")
-    st.caption("Classifies product / category / urgency, matches known issues in the knowledge base, routes to a team, and drafts a first response.")
+    st.caption("Enter a ticket manually or upload a JSON object with `subject` and `body` fields.")
+    upload = st.file_uploader(
+        "Upload ticket JSON (optional)",
+        type=["json"],
+        help='Example: {"subject": "Pipeline is down", "body": "..."}',
+    )
+    uploaded_ticket: dict[str, str] | None = None
+    if upload is not None:
+        try:
+            parsed = json.loads(upload.getvalue().decode("utf-8"))
+            if not isinstance(parsed, dict):
+                raise ValueError("The file must contain one JSON object.")
+            unknown_keys = set(parsed) - {"subject", "body"}
+            if unknown_keys:
+                raise ValueError(
+                    "Only 'subject' and 'body' are accepted. "
+                    f"Unexpected fields: {', '.join(sorted(unknown_keys))}."
+                )
+            subject_value = parsed.get("subject", "")
+            body_value = parsed.get("body", "")
+            if not isinstance(subject_value, str) or not isinstance(body_value, str):
+                raise ValueError("Both 'subject' and 'body' must be strings.")
+            if not (subject_value.strip() or body_value.strip()):
+                raise ValueError("Provide a non-empty 'subject' or 'body'.")
+            uploaded_ticket = {"subject": subject_value, "body": body_value}
+            st.success("Valid ticket JSON loaded. The uploaded values will be used for triage.")
+        except (UnicodeDecodeError, json.JSONDecodeError, ValueError) as err:
+            st.error(f"Invalid ticket JSON: {err}")
+
     col1, col2 = st.columns(2)
     with col1:
-        subject = st.text_input("Subject", placeholder="e.g. Webhook from CloudSync not reaching Snowflake")
+        subject = st.text_input(
+            "Subject",
+            value=uploaded_ticket["subject"] if uploaded_ticket else "",
+            placeholder="e.g. Webhook from CloudSync not reaching Snowflake",
+            disabled=uploaded_ticket is not None,
+        )
     with col2:
         body = st.text_area(
             "Ticket body",
+            value=uploaded_ticket["body"] if uploaded_ticket else "",
             height=180,
             placeholder="Paste the full customer message here...",
+            disabled=uploaded_ticket is not None,
         )
-    if st.button("Run triage", type="primary", disabled=not (subject or body)):
+    ticket_payload = uploaded_ticket or {"subject": subject, "body": body}
+    if st.button("Run triage", type="primary", disabled=not (ticket_payload["subject"].strip() or ticket_payload["body"].strip())):
         try:
             with st.spinner("Triaging..."):
-                result = triage_ticket({"subject": subject, "body": body})
+                result = triage_ticket(ticket_payload)
         except MissingAPIKeyError:
             show_key_error()
             return

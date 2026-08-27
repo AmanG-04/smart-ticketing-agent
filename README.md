@@ -69,6 +69,16 @@ for risk in brief.open_risks:
 streamlit run ui.py
 ```
 
+The **Ticket Triage** screen accepts pasted text or a `.json` upload containing exactly a `subject`
+and/or `body` string. For example:
+
+```json
+{
+  "subject": "Webhook from CloudSync not reaching Snowflake",
+  "body": "Failed deliveries since last week: 9175. ERR_CONNECTION_TIMEOUT in logs."
+}
+```
+
 ### Evaluation harness
 
 ```bash
