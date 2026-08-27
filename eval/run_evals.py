@@ -62,6 +62,15 @@ def run_case(case: dict[str, Any], skip_llm: bool) -> dict[str, Any]:
     if special == "raises_account_not_found":
         outcome = raises_account_not_found(**{k: v for k, v in case["input"].items() if k != "special"})
         return _finish(case, [outcome])
+    if skip_llm:
+        return {
+            "id": cid,
+            "name": case.get("name", ""),
+            "status": "skipped",
+            "quality": None,
+            "checks": [],
+            "note": "Skipped in offline mode; this case invokes the LLM pipeline.",
+        }
     if special == "deterministic":
         outcome = deterministic(**{k: v for k, v in case["input"].items() if k != "special"})
         return _finish(case, [outcome])

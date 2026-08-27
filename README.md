@@ -73,7 +73,7 @@ streamlit run ui.py
 
 ```bash
 python -m eval.run_evals              # full suite (needs GROQ_API_KEY)
-python -m eval.run_evals --skip-llm   # offline checks only (data joins, retrieval quality)
+python -m eval.run_evals --skip-llm   # zero LLM calls: data joins and retrieval quality only
 ```
 
 The latest committed report lives in [`eval_report.md`](eval_report.md) /
